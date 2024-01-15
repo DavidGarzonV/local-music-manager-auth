@@ -45,17 +45,23 @@
 		</style>
 
 		<script>
-
-			// cuando carga la pagina hacer algo
 			window.onload = function () {
 				const urlParams = new URLSearchParams(window.location.search);
-				// obtener el valor del parametro code
 				const code = urlParams.get('code');
-				// si existe el parametro code
-				if (code) {
-					// enviar el codigo al iframe
-					document.getElementById('auth-iframe').src = `local-music-manager://open?code=${code}`;
-					document.getElementById('auth-link').href = `local-music-manager://open?code=${code}`;
+				const state = urlParams.get('state');
+				if (code && state) {
+					const params = new URLSearchParams({
+						code,
+						state,
+					});
+					document.getElementById(
+						'auth-iframe',
+					).src = `local-music-manager://open?${params}`;
+					document.getElementById(
+						'auth-link',
+					).href = `local-music-manager://open?${params}`;
+				} else {
+					document.getElementById('error-message').style.display = 'block';
 				}
 			};
 		</script>
@@ -73,10 +79,16 @@
 		<h3>You will be redirected in a few moments.</h3>
 		<p class="fadein" style="margin-top: 48px">
 			If nothing happens, you can
-			<a id='auth-link' href="">open this link</a>.
+			<a id="auth-link" href="">open this link</a>.
+		</p>
+		<p
+			id="error-message"
+			style="margin-top: 48px; display: none; color: rgb(205, 34, 34)"
+		>
+			Error redirecting to app, try logging in again.
 		</p>
 		<iframe
-			id='auth-iframe'
+			id="auth-iframe"
 			src=""
 			style="opacity: 0; height: 0; width: 0"
 		></iframe>
